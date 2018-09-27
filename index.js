@@ -14,41 +14,51 @@ const rl = readline.createInterface({
 
 async function addBook(urls, index = 0) {
 
-  var book = await service.getBookInfo(urls[index]);
+  try {
+    var book = await service.getBookInfo(urls[index]);
 
-  console.log(book.name + ":  " + book.url);
+    console.log(book.name + ":  " + book.url);
 
-  let bookUrl = book.url;
+    let bookUrl = book.url;
 
-  let path = await downloadImage(book.imageUrl);
+    let path = await downloadImage(book.imageUrl);
 
-  var chapters = await service.getChapterList(bookUrl);
+    var chapters = await service.getChapterList(bookUrl);
 
-  book.imageUrl = path;
+    book.imageUrl = path;
 
-  let result = await knex("book").insert({ ...book, chapterLength: chapters.length }).returning("id");
+    let result = await knex("book").insert({ ...book, chapterLength: chapters.length }).returning("id");
 
-  if (!fs.existsSync(__dirname + "/books/" + result[0])) {
-    fs.mkdirSync(__dirname + "/books/" + result[0]);
-  }
-
-  let sql = 'insert into chapter(name, sort, bookId, url, number) values';
-
-  chapters.map((item, index) => {
-    if (index == chapters.length - 1) {
-      sql += `('${item.name}','${item.path}','${result[0]}','${item.url}','${index + 1}');`;
-    } else {
-      sql += `('${item.name}','${item.path}','${result[0]}','${item.url}','${index + 1}'),`;
+    if (!fs.existsSync(__dirname + "/books/" + result[0])) {
+      fs.mkdirSync(__dirname + "/books/" + result[0]);
     }
-  })
 
-  await knex.raw(sql);
+    let sql = 'insert into chapter(name, sort, bookId, url, number) values';
 
-  if (index == urls.length - 1) {
-    page += 1;
-    getBookUrls();
-  } else {
-    addBook(urls, index + 1);
+    chapters.map((item, index) => {
+      if (index == chapters.length - 1) {
+        sql += `('${item.name}','${item.path}','${result[0]}','${item.url}','${index + 1}');`;
+      } else {
+        sql += `('${item.name}','${item.path}','${result[0]}','${item.url}','${index + 1}'),`;
+      }
+    })
+
+    await knex.raw(sql);
+
+    if (index == urls.length - 1) {
+      page += 1;
+      getBookUrls();
+    } else {
+      addBook(urls, index + 1);
+    }
+  } catch (e) {
+    require("fs").writeFile(__dirname + "/error.txt", urls[index]);
+    if (index == urls.length - 1) {
+      page += 1;
+      getBookUrls();
+    } else {
+      addBook(urls, index + 1);
+    }
   }
 
 }
@@ -111,7 +121,9 @@ function downloadImage(url) {
 
 // test();
 
-getBookUrls();
+require("fs").
+
+  getBookUrls();
 
 
 // async function test() {
