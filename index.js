@@ -47,7 +47,7 @@ async function addBook(urls, index = 0) {
 
     if (index == urls.length - 1) {
       if (page == 100) return;
-      
+
       page += 1;
       getBookUrls();
     } else {
@@ -57,7 +57,7 @@ async function addBook(urls, index = 0) {
     require("fs").writeFile(__dirname + "/error.txt", urls[index]);
     if (index == urls.length - 1) {
       if (page == 100) return;
-      
+
       page += 1;
       getBookUrls();
     } else {
@@ -125,9 +125,8 @@ function downloadImage(url) {
 
 // test();
 
-require("fs").
 
-  getBookUrls();
+getBookUrls();
 
 
 // async function test() {
