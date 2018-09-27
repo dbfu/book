@@ -1,0 +1,7 @@
+book/
+books/
+.DS_Store
+node_modules/
+dist/
+*.txt
+public/images
