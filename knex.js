@@ -3,8 +3,8 @@ var knex = require('knex')({
   connection: { //指明连接参数
     host: '127.0.0.1',
     user: 'root',
-    password: '123456',
-    database: 'books'
+    password: 'Ymx#fzz160803',
+    database: 'book'
   },
   debug: false, //指明是否开启debug模式，默认为true表示开启
   pool: { //指明数据库连接池的大小，默认为{min: 2, max: 10}
