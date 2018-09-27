@@ -9,7 +9,7 @@ var fs = require("fs")
 exports.getBookUrls = async function (page = 1, startIndex = 0) {
 
   return new Promise((resolve, reject) => {
-    let url = `http://www.quanben.co/top/allvote_${page}.html`;
+    let url = `http://www.quanben.co/top/toptime_${page}.html`;
 
     request({ url, encoding: null, }, (error, res, body) => {
 

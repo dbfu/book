@@ -16,6 +16,8 @@ async function addBook(urls, index = 0) {
 
   var book = await service.getBookInfo(urls[index]);
 
+  console.log(book.name + ":  " + book.url);
+
   let bookUrl = book.url;
 
   let path = await downloadImage(book.imageUrl);
@@ -46,7 +48,6 @@ async function addBook(urls, index = 0) {
     page += 1;
     getBookUrls();
   } else {
-    console.log("start get new book " + (index + 1));
     addBook(urls, index + 1);
   }
 
