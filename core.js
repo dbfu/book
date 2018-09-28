@@ -52,25 +52,27 @@ exports.getBookInfo = async function (url) {
         return;
       }
 
-      var $ = cheerio.load(iconv.decode(body, "gbk"));
+      try {
+        var $ = cheerio.load(iconv.decode(body, "gbk"));
 
-      var content = $("#content");
+        var content = $("#content");
 
-      var name = content.find("h1").eq(0).text();
-      var imageUrl = content.find(".novel_img img").attr("src");
-      var author = content.find(".Sum .novel_msg a").text();
-      var type = content.find(".Sum .novel_msg li").eq(3).text();
-      console.log(content.find(".Sum .novel_msg li").text());
-      type = type.split("：")[1].trim();
-      // var type = content.find(".Sum .novel_msg li").eq(3).text().split("：")[1].trim();
-      var count = content.find(".Sum .novel_msg li").eq(4).text().split("：")[1].trim();
-      var desc = $("#description1").text().replace("书籍简介：", "").trim();
-      var lastChapterName = $("#vip a").text();
+        var name = content.find("h1").eq(0).text();
+        var imageUrl = content.find(".novel_img img").attr("src");
+        var author = content.find(".Sum .novel_msg a").text();
+        var type = content.find(".Sum .novel_msg li").eq(3).text();
+        type = type.split("：")[1].trim();
+        var count = content.find(".Sum .novel_msg li").eq(4).text().split("：")[1].trim();
+        var desc = $("#description1").text().replace("书籍简介：", "").trim();
+        var lastChapterName = $("#vip a").text();
 
-      var url = "http://www.quanben.co" + $(".Sum .button2 a").eq(0).attr("href");
-      var book = { name, imageUrl, author, type, count, desc, lastChapterName, url };
+        var url = "http://www.quanben.co" + $(".Sum .button2 a").eq(0).attr("href");
+        var book = { name, imageUrl, author, type, count, desc, lastChapterName, url };
 
-      resolve(book);
+        resolve(book);
+      } catch (e) {
+        resolve(null);
+      }
 
     })
   })

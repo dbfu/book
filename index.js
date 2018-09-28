@@ -15,9 +15,16 @@ const rl = readline.createInterface({
 async function addBook(urls, index = 0) {
 
   try {
+
     var book = await service.getBookInfo(urls[index]);
 
-    console.log(book.name + ":  " + book.url);
+    if (!book) {
+      console.log("error");
+      addBook(urls, index);
+      return;
+    }
+
+    // console.log(book.name + ":  " + book.url);
 
     let bookUrl = book.url;
 
@@ -95,6 +102,7 @@ function downloadImage(url) {
 
 getBookUrls();
 
+// service.getBookInfo("http://www.quanben.co/info/73.html");
 
 // async function test() {
 
