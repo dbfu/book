@@ -54,10 +54,9 @@ async function addBook(urls, index = 0) {
       addBook(urls, index + 1);
     }
   } catch (e) {
-    require("fs").writeFile(__dirname + "/error.txt", urls[index]);
+    require("fs").appendFile(__dirname + "/error.txt", urls[index]);
     if (index == urls.length - 1) {
       if (page == 100) return;
-
       page += 1;
       getBookUrls();
     } else {
@@ -67,36 +66,6 @@ async function addBook(urls, index = 0) {
 
 }
 
-
-async function getBookInfo(i, chapters, bookId, callback) {
-  let chapter = chapters[i];
-
-  // console.log("get chapter" + (i + 1));
-
-  try {
-    var content = await service.getChapterContent(chapter.url);
-
-    let path = "/book/" + bookId + "/" + (i + 1) + ".txt";
-
-    await knex("chapter").insert({
-      name: chapter.name,
-      sort: chapter.path,
-      path: path,
-      bookId: bookId
-    });
-
-    fs.writeFileSync(__dirname + path, content);
-
-    if (i == chapters.length - 1) {
-      callback();
-    } else {
-      getBookInfo(i + 1, chapters, bookId, callback);
-    }
-
-  } catch (err) {
-    getBookInfo(i, chapters, bookId, callback)
-  }
-}
 
 async function getBookUrls() {
   console.log("start get new page " + page);
@@ -122,8 +91,6 @@ function downloadImage(url) {
     });
   })
 }
-
-// test();
 
 
 getBookUrls();
