@@ -60,7 +60,7 @@ exports.getBookInfo = async function (url) {
       var imageUrl = content.find(".novel_img img").attr("src");
       var author = content.find(".Sum .novel_msg a").text();
       var type = content.find(".Sum .novel_msg li").eq(3).text();
-      console.log(type);
+      console.log(content.find(".Sum .novel_msg li").text());
       type = type.split("：")[1].trim();
       // var type = content.find(".Sum .novel_msg li").eq(3).text().split("：")[1].trim();
       var count = content.find(".Sum .novel_msg li").eq(4).text().split("：")[1].trim();
