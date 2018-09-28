@@ -1,8 +1,6 @@
 const Koa = require('koa')
-const IO = require('koa-socket')
 
 const app = new Koa()
-const io = new IO()
 const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
@@ -54,11 +52,6 @@ app.use(reply.routes(), reply.allowedMethods())
 app.use(recommend.routes(), recommend.allowedMethods())
 app.use(suggest.routes(), suggest.allowedMethods())
 
-io.attach(app)
-
-io.on('message', async (ctx) => {
-  console.error(ctx);
-});
 
 // error-handling
 app.on('error', (err, ctx) => {

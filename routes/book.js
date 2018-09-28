@@ -41,7 +41,7 @@ router.get('/query/:id', async function (ctx, next) {
 
   var bag = await service.where({ "userId": ctx.request.header["user-id"], "bookId": ctx.params.id }).from('bag').first();
 
-  result = { ...result, count: result.chapterLength, isCollect: !!bag, chapterId: book ? book.chapterId : 0, isRecommend: !!(recommend.count) };
+  result = { ...result, chapterLength: result.chapterLength, isCollect: !!bag, chapterId: book ? book.chapterId : 0, isRecommend: !!(recommend.count) };
 
   ctx.body = result;
 })
