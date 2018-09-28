@@ -45,6 +45,7 @@ exports.getBookInfo = async function (url) {
 
     request({ url, encoding: null, }, (error, res, body) => {
 
+
       if (error) {
         fs.appendFileSync(__dirname + "/book-error.txt", url + "\n");
         console.error(error);
@@ -58,7 +59,10 @@ exports.getBookInfo = async function (url) {
       var name = content.find("h1").eq(0).text();
       var imageUrl = content.find(".novel_img img").attr("src");
       var author = content.find(".Sum .novel_msg a").text();
-      var type = content.find(".Sum .novel_msg li").eq(3).text().split("：")[1].trim();
+      var type = content.find(".Sum .novel_msg li").eq(3).text();
+      console.log(type);
+      type = type.split("：")[1].trim();
+      // var type = content.find(".Sum .novel_msg li").eq(3).text().split("：")[1].trim();
       var count = content.find(".Sum .novel_msg li").eq(4).text().split("：")[1].trim();
       var desc = $("#description1").text().replace("书籍简介：", "").trim();
       var lastChapterName = $("#vip a").text();
