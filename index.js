@@ -19,12 +19,16 @@ async function addBook(urls, index = 0) {
     var book = await service.getBookInfo(urls[index]);
 
     if (!book) {
-      console.log("error");
-      addBook(urls, index);
+
+      this.setTimeout(() => {
+        console.log("error");
+        addBook(urls, index);
+      }, 1000);
+
       return;
     }
 
-    // console.log(book.name + ":  " + book.url);
+    console.log(book.name);
 
     let bookUrl = book.url;
 
