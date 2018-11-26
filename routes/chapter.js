@@ -14,28 +14,16 @@ router.get('/list', async function (ctx, next) {
     var chapter = await service.column("number").select().where({ id: record.chapterId }).from('chapter').first();
     var total = await service.count("*").select().where({ bookId: ctx.query.bookId }).from('chapter');
 
-    let number = parseInt((chapter.number) / 101);
+    var result = await service.column("id", "name").select().where({ bookId: ctx.query.bookId }).from('chapter').orderBy("sort", ctx.query.sort == 1 ? "asc" : "desc");
 
-    if (ctx.query.sort == 0) {
-      number = parseInt((total[0]["count(*)"] - chapter.number) / 101);
-    }
-
-    var result = await service.column("id", "name").select().where({ bookId: ctx.query.bookId }).from('chapter').orderBy("sort", ctx.query.sort == 1 ? "asc" : "desc").offset(number * 100).limit(100);
-
-    ctx.body = { list: result, chapterId: record ? record.chapterId : 0, index: number + 1, total: total[0]["count(*)"] };
+    ctx.body = { list: result, chapterId: record.chapterId, index: chapter.number - 1, total: total[0]["count(*)"] };
   } else {
 
     var total = await service.count("*").select().where({ bookId: ctx.query.bookId }).from('chapter');
 
-    let number = 0;
+    var result = await service.column("id", "name").select().where({ bookId: ctx.query.bookId }).from('chapter').orderBy("sort", ctx.query.sort == 1 ? "asc" : "desc");
 
-    if (ctx.query.sort == 0) {
-      number = parseInt((total[0]["count(*)"] - number) / 101);
-    }
-
-    var result = await service.column("id", "name").select().where({ bookId: ctx.query.bookId }).from('chapter').orderBy("sort", ctx.query.sort == 1 ? "asc" : "desc").offset(number * 100).limit(100);
-
-    ctx.body = { list: result, chapterId: 0, index: number + 1, total: total[0]["count(*)"] };
+    ctx.body = { list: result, chapterId: 0, index: 0, total: total[0]["count(*)"] };
   }
 
 })
@@ -90,11 +78,9 @@ router.get('/content', async function (ctx, next) {
 
 router.get('/next', async function (ctx, next) {
 
-
   let sort = parseInt(ctx.query.sort);
   sort += 1;
   var cacheChapter = await service.column("*").select().where({ sort: sort }).from('chapter').first();
-
 
   while (!cacheChapter) {
     sort += 1;

@@ -47,7 +47,14 @@ router.get('/query/:id', async function (ctx, next) {
 })
 
 router.get('/alike', async function (ctx, next) {
-  var result = await service.column("*").select().from('book').limit(8)
+  var result = await service.column("*").select().from('book').limit(4)
+  ctx.body = result;
+})
+
+router.get('/random', async function (ctx, next) {
+  let random = Math.random();
+  let index = parseInt(random * 320);
+  var result = await service.column("*").select().from('book').orderBy("id").offset(index).limit(4);
   ctx.body = result;
 })
 
